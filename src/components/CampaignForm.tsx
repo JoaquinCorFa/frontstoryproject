@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
 import type { Campaign } from '../types/Campaign'
+import Alert from './Alert'
 
 interface Props {
   addCampaign: (campaign: Campaign) => void
@@ -15,12 +16,20 @@ export default function CampaignForm({ addCampaign }: Props) {
     revenue: '',
   })
 
+  const [error, setError] = useState<string | null>(null)
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+
+    if (new Date(formData.endDate) < new Date(formData.startDate)) {
+      setError('End date cannot be earlier than start date.')
+      return
+    }
+
     const newCampaign: Campaign = {
       name: formData.name,
       startDate: formData.startDate,
@@ -29,6 +38,7 @@ export default function CampaignForm({ addCampaign }: Props) {
       cost: parseFloat(formData.cost),
       revenue: parseFloat(formData.revenue),
     }
+
     addCampaign(newCampaign)
     setFormData({
       name: '',
@@ -38,17 +48,68 @@ export default function CampaignForm({ addCampaign }: Props) {
       cost: '',
       revenue: '',
     })
+    setError(null)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form">
-      <input name="name" required placeholder="Campaign Name" value={formData.name} onChange={handleChange} />
-      <input name="startDate" type="date" required value={formData.startDate} onChange={handleChange} />
-      <input name="endDate" type="date" required value={formData.endDate} onChange={handleChange} />
-      <input name="clicks" type="number" required placeholder="Clicks" value={formData.clicks} onChange={handleChange} />
-      <input name="cost" type="number" step="0.01" required placeholder="Cost" value={formData.cost} onChange={handleChange} />
-      <input name="revenue" type="number" step="0.01" required placeholder="Revenue" value={formData.revenue} onChange={handleChange} />
-      <button type="submit">Add Campaign</button>
-    </form>
+    <>
+      {error && <Alert message={error} onClose={() => setError(null)} />}
+      <form onSubmit={handleSubmit} className="form">
+  <input
+    name="name"
+    required
+    placeholder="Campaign Name"
+    value={formData.name}
+    onChange={handleChange}
+  />
+
+  <input
+    name="startDate"
+    type="date"
+    required
+    value={formData.startDate}
+    onChange={handleChange}
+  />
+
+  <input
+    name="endDate"
+    type="date"
+    required
+    value={formData.endDate}
+    onChange={handleChange}
+  />
+
+  <input
+    name="clicks"
+    type="number"
+    required
+    placeholder="Clicks"
+    value={formData.clicks}
+    onChange={handleChange}
+  />
+
+  <input
+    name="cost"
+    type="number"
+    step="0.01"
+    required
+    placeholder="Cost"
+    value={formData.cost}
+    onChange={handleChange}
+  />
+
+  <input
+    name="revenue"
+    type="number"
+    step="0.01"
+    required
+    placeholder="Revenue"
+    value={formData.revenue}
+    onChange={handleChange}
+  />
+
+  <button type="submit">Add Campaign</button>
+</form>
+    </>
   )
 }
