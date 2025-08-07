@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Campaign } from '../types/Campaign'
+import { Trash2 } from 'lucide-react'
 
 interface Props {
   campaigns: Campaign[]
@@ -48,7 +49,14 @@ export default function CampaignTable({ campaigns, deleteCampaign }: Props) {
               <td>${c.cost.toFixed(2)}</td>
               <td>${c.revenue.toFixed(2)}</td>
               <td>${(c.revenue - c.cost).toFixed(2)}</td>
-              <td><button onClick={() => deleteCampaign(i)}>🗑️</button></td>
+              <td><button
+    onClick={() => deleteCampaign(i)}
+    aria-label="Delete campaign"
+    className="delete-btn"
+    title="Delete Campaign"
+  >
+    <Trash2 size={18} />
+  </button></td>
             </tr>
           ))}
         </tbody>

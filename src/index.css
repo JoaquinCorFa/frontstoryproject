@@ -89,3 +89,24 @@ th {
 .form button:hover {
   background-color: #4e54e6;
 }
+
+.delete-btn {
+  background-color: #ff4d4f;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background-color: #d9363e;
+}
+
+.delete-btn svg {
+  pointer-events: none;
+}
